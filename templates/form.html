@@ -1,0 +1,39 @@
+<form class="formulario" method="post" action="{{ acao }}">
+  <div class="campo">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" required placeholder="Ex.: Crato"
+           value="{{ registro.nome if registro else '' }}">
+  </div>
+
+  <div class="campo">
+    <label for="sigla_uf">UF</label>
+    <select id="sigla_uf" name="sigla_uf">
+      {% for sigla, nome_uf in ufs %}
+        <option value="{{ sigla }}"
+          {% if registro and registro.sigla_uf == sigla %}selected{% endif %}>
+          {{ sigla }} — {{ nome_uf }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="campo">
+    <label for="id_ibge">Código IBGE</label>
+    <input id="id_ibge" name="id_ibge" inputmode="numeric" required
+           value="{{ registro.id_ibge if registro else '' }}">
+  </div>
+
+  <div class="campo">
+    <label for="populacao_estimada">População estimada</label>
+    <input id="populacao_estimada" name="populacao_estimada" inputmode="numeric" required
+           value="{{ registro.populacao_estimada if registro else '' }}">
+  </div>
+
+  <label class="capital">
+    <input type="checkbox" name="capital"
+           {% if registro and registro.capital %}checked{% endif %}>
+    É capital do estado
+  </label>
+
+  <button class="principal" type="submit">{{ rotulo }}</button>
+</form>

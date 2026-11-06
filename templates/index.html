@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<section class="metricas">
+    <div><span>Municípios</span><strong>{{ resumo.total_municipios }}</strong></div>
+    <div><span>Capitais</span><strong>{{ resumo.capitais }}</strong></div>
+    <div><span>População somada</span><strong>{{ resumo.populacao_total|milhar }}</strong></div>
+    <div><span>Estados</span><strong>{{ resumo.estados }}</strong></div>
+</section>
+
+<form class="filtros" method="get" action="{{ url_for('index') }}">
+
+    <input type="search" name="q" value="{{ busca }}" placeholder="Buscar município pelo nome...">
+
+    <select name="uf">
+        <option value="">Todas as UFs</option>
+
+        {% for sigla, nome_uf in ufs %}
+            <option value="{{ sigla }}" {% if sigla == uf %}selected{% endif %}>
+                {{ sigla }} — {{ nome_uf }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filtrar</button>
+</form>
+
+<section class="painel">
+
+    <h2>Novo município</h2>
+
+    {% with acao=url_for('criar'), registro=None, rotulo='Cadastrar' %}
+        {% include "form.html" %}
+    {% endwith %}
+
+</section>
+
+<section class="tabela-wrap">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Município</th>
+                <th>UF</th>
+                <th>IBGE</th>
+                <th>População</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for item in municipios %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('detalhe', nome=item.nome) }}">
+                        {{ item.nome }}
+                    </a>
+
+                    {% if item.capital %}
+                        <span class="selo">Capital</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ item.sigla_uf }}</td>
+                <td class="mono">{{ item.id_ibge }}</td>
+                <td>{{ item.populacao_estimada|milhar }}</td>
+
+                <td class="acoes">
+
+                    <a href="{{ url_for('editar', nome=item.nome) }}">
+                        Editar
+                    </a>
+
+                    <form method="post"
+                    action="{{ url_for('excluir', nome=item.nome) }}"
+                    onsubmit="return confirm('Excluir {{ item.nome }}?');">
+
+                        <button class="perigo" type="submit">
+                            Excluir
+                        </button>
+
+                    </form>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="5" class="vazio">
+                    Nenhum município encontrado com esse filtro.
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+</section>
+
+{% endblock %}

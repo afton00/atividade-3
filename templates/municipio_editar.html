@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Editar {{ nome }}{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+  <h2>Atualizar {{ nome }}</h2>
+  {% with acao=url_for('editar', nome=nome), registro=registro, rotulo='Salvar alterações' %}
+    {% include "form.html" %}
+  {% endwith %}
+  <p><a href__="{{ url_for('index') }}">Voltar para a lista</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titulo %}{{ nome }} — Municípios do Nordeste{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+  <h2>{{ nome }}</h2>
+  <dl class="detalhe">
+    <div><dt>Estado</dt><dd>{{ dados.estado }} ({{ dados.sigla_uf }})</dd></div>
+    <div><dt>Código IBGE</dt><dd class="mono">{{ dados.id_ibge }}</dd></div>
+    <div><dt>População estimada</dt><dd>{{ dados.populacao_estimada|milhar }}</dd></div>
+    <div><dt>Capital</dt><dd>{{ 'Sim' if dados.capital else 'Não' }}</dd></div>
+  </dl>
+  <p class="acoes">
+    <a class="principal-link" href__="{{ url_for('editar', nome=nome) }}">Editar</a>
+    <a href__="{{ url_for('index') }}">Voltar para a lista</a>
+  </p>
+</section>
+{% endblock %}
